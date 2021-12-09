@@ -225,27 +225,37 @@ SELECT employee_id, first_name, last_name, salary
 
 
 -- 숫자를 명시해 정렬1 
+-- 2, 3 : 첫번째 컬럼과 두번째 컬럼 순으로 정렬
 SELECT *
 FROM employees
 ORDER BY 2, 3 DESC
 ;
 
 
--- 숫자를 명시해 정렬2 
+-- 숫자를 명시해 정렬2
+-- 셀렉트된 항목은 4가지. 5번째 컬럼 없으므로 오류
 SELECT employee_id, first_name, last_name, email
 FROM employees
 ORDER BY 2, 3, 5;
 
+
 -- 숫자를 명시해 정렬3
+-- first_name, last_name, phone_number 기준으로 정렬되지만 phone_number는 보여지지 않음.
 SELECT employee_id, first_name, last_name, email
 FROM employees
 ORDER BY 2, 3, phone_number;
 
 
 -- commission_pct 컬럼으로 오름차순 정렬
+-- 오라클에서는 null 값이 큰 값
 SELECT employee_id, first_name, last_name, commission_pct
 FROM employees
 ORDER BY commission_pct;
+=>
+employee_id   first_name    last_name     commission_pct
+173	      Sundita       Kumar	  0.1
+166	      Sundar        Ande	  0.1
+163	      Danielle      Greene	  0.15
 
 
 -- commission_pct 컬럼으로 내림차순 정렬
