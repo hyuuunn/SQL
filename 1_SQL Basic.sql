@@ -121,10 +121,10 @@ DEPARTMENT_ID           NUMBER(4)
 SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
 FROM EMPLOYEES;
 =>
-EMPLOYEE_ID FIRST_NAME LAST_NAME   SALARY
-100	     Steven	  King	       24000
-101	     Neena	  Kochhar	17000
-102	     Lex	  De Haan	17000
+EMPLOYEE_ID  FIRST_NAME   LAST_NAME  SALARY
+100	     Steven	  King        24000
+101	     Neena	  Kochhar     17000
+102	     Lex	  De Haan     17000
 
 -- departmemts 테이블 조회
 SELECT *
@@ -143,7 +143,7 @@ SELECT *
   FROM EMPLOYEES
  WHERE EMPLOYEE_ID <> 100;
  
--- 사번이 100번이 아닌 사원 조회12
+-- 사번이 100번이 아닌 사원 조회2
  SELECT *
   FROM EMPLOYEES
  WHERE EMPLOYEE_ID != 100;
@@ -163,6 +163,12 @@ SELECT *
 SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
   FROM EMPLOYEES
  WHERE SALARY >= 5000;
+ =>
+ EMPLOYEE_ID   FIRST_NAME  LAST_NAME  SALARY
+ 100	       Steven	   King       24000
+ 101	       Neena	   Kochhar    17000
+ 102	       Lex	   De Haan    17000
+ 
  
 -- 급여가 2400 이하이고 20000 이상인 사원 조회  
 SELECT *
@@ -175,12 +181,17 @@ SELECT *
 SELECT *
   FROM employees
  WHERE last_name = 'grant' ;
+ => 
+ 없음
  
 -- last_name이 Grant인 사원 조회  
 SELECT *
   FROM employees
  WHERE last_name = 'Grant' ;
-
+ =>
+ EMPLOYEE_ID  FIRST_NAME    LAST_NAME     EMAIL         PHONE_NUMBER         HIRE_DATE                 JOB_ID          SALARY        COMMISSION_PCT       MANAGER_ID    DEPARTMENT_ID
+ 199	       Douglas	    Grant	  DGRANT	650.507.9844	     2008/01/13 00:00:00	SH_CLERK       2600		                  124	         50
+ 178	       Kimberely    Grant	  KGRANT	011.44.1644.429263   2007/05/24 00:00:00	SA_REP	       7000	     0.15	          149	
     
    
 -- ORDER BY 절 실습     
