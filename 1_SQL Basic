@@ -102,11 +102,29 @@ FROM EMPLOYEES;
 
 -- employees 테이블 layout  
 DESC EMPLOYEES;
+=>
+이름             널?       유형           
+-------------- -------- ------------ 
+EMPLOYEE_ID    NOT NULL NUMBER(6)    
+FIRST_NAME              VARCHAR2(20) 
+LAST_NAME      NOT NULL VARCHAR2(25) 
+EMAIL          NOT NULL VARCHAR2(25) 
+PHONE_NUMBER            VARCHAR2(20) 
+HIRE_DATE      NOT NULL DATE         
+JOB_ID         NOT NULL VARCHAR2(10) 
+SALARY                  NUMBER(8,2)  
+COMMISSION_PCT          NUMBER(2,2)  
+MANAGER_ID              NUMBER(6)    
+DEPARTMENT_ID           NUMBER(4) 
 
 -- employees 테이블 일부컬럼 조회  
 SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
 FROM EMPLOYEES;
-
+=>
+EMPLOYEE_ID FIRST_NAME LAST_NAME   SALARY
+100	     Steven	  King	       24000
+101	     Neena	  Kochhar	17000
+102	     Lex	  De Haan	17000
 
 -- departmemts 테이블 조회
 SELECT *
