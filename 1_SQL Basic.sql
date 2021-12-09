@@ -485,11 +485,11 @@ SELECT employee_id, first_name, last_name, salary, job_id
        END salary_rank     
 FROM employees;
 =>
-employee_id   first_name    last_name     salary job_id
-102	Lex	De Haan	17000	AD_VP	최상위
-103	Alexander	Hunold	9000	IT_PROG	중간
-104	Bruce	Ernst	6000	IT_PROG	중간
-105	David	Austin	4800	IT_PROG	낮음
+employee_id   first_name    last_name     salary  job_id   salary_rank
+102	      Lex	    De Haan	  17000	  AD_VP	   최상위
+103	      Alexander	    Hunold	  9000	  IT_PROG  중간
+104	      Bruce	    Ernst	  6000	  IT_PROG  중간
+105	      David	    Austin	  4800	  IT_PROG  낮음
 
 -- ???
 SELECT employee_id, first_name, last_name, salary, job_id
