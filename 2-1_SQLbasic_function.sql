@@ -1,13 +1,20 @@
 -- 숫자형 함수
+
 -- ABS
+-- ABS (n) : n의 절대값 반환
 SELECT ABS(-7), ABS(0), ABS(7.8)
   FROM DUAL;
   
 -- CEIL, FLOOR  
+-- CEIL ( n ) : n과 같거나 큰 최소 정수 반환
+-- FLOOR ( n ) : n과 같거나 작은 최대 정수 반환
 SELECT CEIL(7.6), FLOOR(7.6)
   FROM DUAL;  
   
 -- EXP, LN, LOG
+-- EXP ( n ) : e(e = 2.71828183...)의 n승 반환
+-- LN ( n ) : n의 자연로그 값을 반환 (n > 0)
+-- LOG ( n2, n1 ) : n2는 밑, n1은 진수. n1은 양수, n2 는 0과 1이 아닌 양수
 SELECT EXP(5), LN(148.413159102576603421115580040552279624), LOG(10, 10000)
 FROM DUAL; 
 
@@ -16,16 +23,24 @@ FROM DUAL;
 
 
 -- MOD, SIGN
+-- MOD ( n2, n1 ) : n2를 n1로 나눈 나머지 반환
+-- SIGN ( n ) : n > 0이면 1, n < 0이면 -1, n=0이면 0 반환
 SELECT MOD(17, 3), SIGN(-19), SIGN(0)
   FROM DUAL;
   
 -- POWER, SQRT
+-- POWER ( n2, n1 ) : n2의 n1승을 반환
+-- SQRT ( n ) : n의 제곱근 반환
 SELECT POWER(2,3), SQRT(3)
   FROM DUAL;
   
 -- ROUND, TRUNC
+-- ROUND ( n, i ) : n의 소수점 기준 ( i+1 )번째에서 반올림한 값을 반환, 정수로 만들 시 i는0(소수점 첫째 자리 기준 반올림)
+-- TRUNC ( n1, n2 ) : n1의 소수점 기준 n2 자리에서 절사, n2 생략 시 0이 적용
 SELECT ROUND(3.545, 2), ROUND(3.545, 1), TRUNC(3.545, 2), TRUNC(3.545, 1)
   FROM DUAL; 
+  
+  ==> 3.55  3.5  3.54  3.5
    
 -------------------------------------------------------------------------------------------
 
@@ -37,6 +52,8 @@ SELECT ROUND(3.545, 2), ROUND(3.545, 1), TRUNC(3.545, 2), TRUNC(3.545, 1)
 SELECT CONCAT('A', 'B'), 'A' || 'B' || 'C'
   FROM DUAL;
   
+  ==> AB  ABC
+  
 -- INITCAP, UPPER, LOWER
 -- INITCAP ( chr ) : chr의 첫 번째 문자를 대문자로 변환
 -- LOWER ( chr ) : chr을 소문자로 변환
@@ -44,10 +61,13 @@ SELECT CONCAT('A', 'B'), 'A' || 'B' || 'C'
 SELECT INITCAP('abc'), UPPER('abc'), LOWER('A나bC'), INITCAP('홍gildong')
   FROM DUAL;  
   
+  ==> Abc ABC a나bc  홍Gildong
+  
 SELECT *
 FROM employees
 WHERE first_name = 'steven';  
 
+--  first_name 전체 값을 대문자로 변환해 비교
 SELECT *
 FROM employees
 WHERE UPPER(first_name) = 'STEVEN';
@@ -57,7 +77,9 @@ WHERE UPPER(first_name) = 'STEVEN';
 -- RPAD ( expr1, n, expr2 ) : expr1을 반환하는데, expr2를 (n - expr1 길 이) 만큼 오른쪽을 채워 반환
 SELECT LPAD( 'SQL', 5, '*' ), RPAD('SQL', 5, '*')
   FROM DUAL;
-  
+  ==> **SQL SQL**
+
+--  phone_number 컬럼 값을 20자리로 고정 후, 남는 자리를 스페이스로 왼쪽을 채움 => 우측 정렬 효과
 SELECT employee_id, 
        phone_number,
        LPAD(phone_number, 20, ' ') phone_number2
@@ -69,6 +91,7 @@ ORDER BY 1;
 -- RTRIM ( expr1, expr2 ) : expr1의 오른쪽에서 expr2를 제거한 결과를 반환
 SELECT LTRIM('**SQL**', '*'), RTRIM('**SQL**', '*')
   FROM DUAL;  
+  ==> SQL** **SQL
   
 -- SUBSTR
 -- SUBSTR ( chr, n1, n2 )
@@ -82,7 +105,9 @@ SELECT SUBSTR('ABCDEFG', 1, 2) FIRSTS
       ,SUBSTR('ABCDEFG', 3 )   FOURTHS
       ,SUBSTR('ABCDEFG', -3)   FIFTHS
       ,SUBSTR('ABCDEFG', -3, 2)  SIXTHS
-  FROM DUAL;    
+  FROM DUAL;
+  ==> FIRSTS  SECONDS THIRDS  FOURTHS FIFTHS  SIXTHS
+      AB      AB      CD      CDEFG   EFG     EF
   
 -- TRIM, ASCII, LENGTH, LENGTHB
 -- TRIM ( chr ) : chr의 양쪽 끝 공백을 제거한 결과를 반환
@@ -90,12 +115,14 @@ SELECT SUBSTR('ABCDEFG', 1, 2) FIRSTS
 -- LENGTH ( chr ) : chr 문자의 글자 수를 반환
 -- LENGTHB(chr) : chr 문자의 바이트수 반환
 SELECT TRIM(' AB C D '), ASCII('a'), LENGTH('A B C'), LENGTHB('A B 강')
-  FROM DUAL;  
+  FROM DUAL;
+  ==> AB C D  97  5  7
   
 -- REPLACE
 -- REPLACE ( chr, serch_str, rep_str ) : Chr에서 serch_str을 찾아 rep_str로 대체
 SELECT REPLACE('산은 산이요 물은 물이다', '산', '언덕')
-  FROM DUAL;  
+  FROM DUAL;
+  ==> 언덕은 언덕이요 물은 
   
 SELECT TRIM(' AB C D '), REPLACE(' AB C D ', ' ', '')
   FROM DUAL;    
