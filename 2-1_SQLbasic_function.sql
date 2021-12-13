@@ -122,21 +122,26 @@ SELECT TRIM(' AB C D '), ASCII('a'), LENGTH('A B C'), LENGTHB('A B 강')
 -- REPLACE ( chr, serch_str, rep_str ) : Chr에서 serch_str을 찾아 rep_str로 대체
 SELECT REPLACE('산은 산이요 물은 물이다', '산', '언덕')
   FROM DUAL;
-  ==> 언덕은 언덕이요 물은 
-  
+  ==> 언덕은 언덕이요 물은 물이다.
+
+-- TRIM은 앞 뒤 공백 제거
+-- REPLACE는 공백 전체 제거 시 많이 사용
 SELECT TRIM(' AB C D '), REPLACE(' AB C D ', ' ', '')
-  FROM DUAL;    
+  FROM DUAL;
+  ==> AB C D  ABCD
   
 -- INSTR
 -- INSTR ( chr1,chr2, n1, n2 )
 -- - chr1에서 chr2 문자를 찾아 그 시작 위치 반환
 -- - n1은 chr1에서 몇 번째 문자부터 찾을 것인지를 나타냄. 생략 시 1이 적용
--- - n2는 chr1에서 chr2 문자를 찾을 때 일치하는 문 자의 몇번째 위치를 반환할지를 나타냄. 생략 시 1 이 적용됨
+-- - n2는 chr1에서 chr2 문자를 찾을 때 일치하는 문자의 몇번째 위치를 반환할지를 나타냄. 생략 시 1 이 적용됨
 SELECT INSTR('ABCABCABC', 'C')
       ,INSTR('ABCABCABC', 'c')
       ,INSTR('ABCABCABC', 'C', 2)
       ,INSTR('ABCABCABC', 'C', 2, 2)
-FROM DUAL;
+  FROM DUAL;
+  ==> 3 0 3 6
+  
 
 -------------------------------------------------------------------------------------------
 
@@ -151,6 +156,11 @@ SELECT SYSDATE
 -- ADD_MONTHS ( date, n ) : date 날짜에 n개월을 더한 날짜를 반환
 SELECT ADD_MONTHS(SYSDATE, 1), ADD_MONTHS(SYSDATE, -1), ADD_MONTHS(SYSDATE, 0)
   FROM DUAL;  
+
+SELECT ADD_MONTHS(SYSDATE, 1) AS DAY1,
+       ADD_MONTHS(SYSDATE, -1) AS DAY2,
+       ADD_MONTHS(SYSDATE, 0) AS DAY3
+  FROM DUAL;
   
 -- MONTHS_BETWEEN
 -- MONTHS_BETWE EN ( date1, date2 ) : date1과 date2 두 날짜 사이의 개월 수를 반환. ate1 > date2 이면 양수, 반대면 음수
@@ -159,6 +169,12 @@ SELECT SYSDATE + 31
       ,MONTHS_BETWEEN(SYSDATE + 31, SYSDATE )
       ,MONTHS_BETWEEN(SYSDATE - 31, SYSDATE )
 FROM DUAL;
+
+SELECT SYSDATE + 31 AS DAY1 
+      ,SYSDATE - 31 AS DAY2
+      ,MONTHS_BETWEEN(SYSDATE + 31, SYSDATE ) AS DAY3
+      ,MONTHS_BETWEEN(SYSDATE - 31, SYSDATE ) AS DAY4
+ FROM DUAL;
   
 -- LAST_DAY, NEXT_DAY
 -- LAST_DAY ( date ) : date가 속한 월의 마지막 일자를 반환
@@ -167,6 +183,10 @@ FROM DUAL;
 SELECT LAST_DAY(SYSDATE)
       ,NEXT_DAY(SYSDATE, '금')
 FROM DUAL ;  
+
+SELECT LAST_DAY(SYSDATE) AS DAY1
+      ,NEXT_DAY(SYSDATE, '금') AS DAY2
+FROM DUAL;
 
 -- ROUND
 -- ROUND ( date, format ) : date를 format 기준으로 반올림한 날짜 반환. format은 YYYY, MM, DD, HH, HH24, MI 등 사용 가능, 생략 시 DD
@@ -177,8 +197,8 @@ SELECT SYSDATE
       ,ROUND(SYSDATE, 'HH24')  HOURS24
       ,ROUND(SYSDATE, 'MI')    MINUTES
       ,ROUND(SYSDATE)          DEFAULTS
-FROM DUAL ;  
-
+ FROM DUAL ;
+ ==> 2021/12/13 11:59:49	2022/01/01 00:00:00	2021/12/01 00:00:00	2021/12/13 00:00:00	2021/12/13 12:00:00	2021/12/13 12:00:00	2021/12/13 00:00:00
 
 -- TRUNC
 -- TRUNC ( date, format ) : date를 format 기준으로 잘라낸 날짜 반환. format은 ROUND 함수와 동일하게 사용 가 능
@@ -195,4 +215,6 @@ SELECT SYSDATE,
        SYSDATE + 1 nextday,
        SYSDATE - 1 previousday
   FROM DUAL;
+  ==> SYSDATE                   nextday                 previousday
+      2021/12/13 12:02:12	2021/12/14 12:02:12	2021/12/12 12:02:12
 
