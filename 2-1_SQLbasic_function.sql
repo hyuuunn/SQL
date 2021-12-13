@@ -191,9 +191,9 @@ FROM DUAL;
 -- ROUND
 -- ROUND ( date, format ) : date를 format 기준으로 반올림한 날짜 반환. format은 YYYY, MM, DD, HH, HH24, MI 등 사용 가능, 생략 시 DD
 SELECT SYSDATE 
-      ,ROUND(SYSDATE, 'YYYY') YEARS
-      ,ROUND(SYSDATE, 'MM') MONTHS
-      ,ROUND(SYSDATE, 'DD')   DAYS
+      ,ROUND(SYSDATE, 'YYYY')  YEARS
+      ,ROUND(SYSDATE, 'MM')    MONTHS
+      ,ROUND(SYSDATE, 'DD')    DAYS
       ,ROUND(SYSDATE, 'HH24')  HOURS24
       ,ROUND(SYSDATE, 'MI')    MINUTES
       ,ROUND(SYSDATE)          DEFAULTS
