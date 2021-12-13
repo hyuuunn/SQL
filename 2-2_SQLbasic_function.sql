@@ -54,7 +54,8 @@ SELECT TO_DATE('20211213', 'YYYY-MM-DD HH24:MI:SS')
 FROM DUAL;
 
 SELECT TO_DATE('2021-12-13', 'YYYYMMDD HH24:MI:SS')
-FROM DUAL;
+ FROM DUAL;
+ ==> 오류 -> 2021-12-13에는 -가 있으나 YYYYMMDD에는 없음 format은 정확히 일치해야 함
 
 -----------------------------------------------------------------------------------
 -- Null 처리 함수
@@ -63,25 +64,30 @@ FROM DUAL;
 -- NVL 함수
 -- NVL( expr1, expr2 ) : expr1 값이 NULL이면 expr2를 반환
 SELECT NVL(NULL, 'A'), NVL(NULL, 1), NVL(2, 3)
-FROM DUAL;
+ FROM DUAL;
+ ==> A        1      2
 
 -- NVL2 함수
 -- NVL2 ( expr1, expr2, expr3 ) : expr1 값이 NULL이면 expr3을, NULL이 아니면 expr2를 반환
 SELECT NVL2(NULL, 'A', 'B'), NVL2('A', 'B', 'C')
-FROM DUAL;
+ FROM DUAL;
+ ==> B        B
 
 -- COALESCE 함수
 -- COALESCE ( expr1, expr2, ... ) : expr1, expr2, expr3, .... 에서 첫 번째 로 NULL이 아닌 값 반환
 SELECT COALESCE(NULL, NULL, NULL, 'A', NULL, 'B')
 FROM DUAL;
+==> A
 
 SELECT COALESCE(NULL, NULL, NULL, NULL, NULL, NULL)
 FROM DUAL;
+==> (null)
 
 -- NULLIF 함수
 -- NULLIF ( expr1, expr2 ) : expr1과 expr2 값이 같으면 NULL을, 같지 않으면 expr1 반환
 SELECT NULLIF(100, 100), NULLIF(100, 200)
 FROM DUAL;
+==> (null)    100
 
 ------------------------------------------------------------------------
 -- 기타 함수
@@ -101,9 +107,9 @@ SELECT  DECODE(1, 2, 3, 4, 5, 1, 7, 9)
        ,DECODE(1, 2, 3, 4, 5, 6, 7, 9)
        ,DECODE(1, 2, 3, 4, 5, 6, 7)
  FROM DUAL;
+ ==> 7        9      (null)-->default값이 생략되어있어서 null
 
-
--- 재미있는 문제 풀이 
+-- 문제 풀이 
 --1. 서기 1년 1월 1일부터 오늘까지 1조원을 쓰려면 매일 얼마를 써야 하는지 구하시오. 
 --   최종 결과는 소수점 첫 째 자리에서 반올림 할 것 
 SELECT TO_NUMBER(TO_CHAR(SYSDATE, 'YYYY')) - 1 LAST_YEAR
