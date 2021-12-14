@@ -1,4 +1,10 @@
--- 연산자 실습
+-- 연산자
+--  연산자  내용                                     우선순위
+--  +, -  단항 부호 연산자(양수,음수)                    1
+--  *, /  수식연산자 (곱하기, 나누기)                    2
+--  +, -  수식연산자 (더하기, 빼기), 날짜형 데이터 사용 가능  3
+--  ||    문자열 결합 연산자 (예, ‘a’ || ‘b’  ‘ab’)    3
+
 -- 더하기, 빼기
 SELECT 1+1 plus_test, 1-1 minus_test
   FROM DUAL;
@@ -28,6 +34,7 @@ AB	CDF
 -- 컬럼 및 표현식 다음에 AS 별칭(Alias)을 기술하면 조회 결과가 별칭으로 보임
 SELECT first_name || ' ' || last_name AS full_name
 FROM EMPLOYEES;
+
 -- 별칭에서 AS는 생략 가능
 SELECT first_name || ' ' || last_name full_name
 FROM employees;
@@ -40,6 +47,18 @@ Mozhe Atkinson
 
 
 -- 비교연산자
+-- 연산자            내용                                    우선순위
+-- =               동등 연산자, 값이 같으면 참                   4
+-- !=, <>          비동등 연산자, 값이 틀리면 참                  4
+-- >, <            부등호 연산자. 예, 4 > 3 (참), 4 < 3 (거짓)   4
+-- >= , <=         부등호 연산자                              4
+-- BETWEEN...AND   대상값 BETWEEN 값1 AND 값2                 4
+--                 (대상값 >= 값1 AND 대상값 <= 값2)
+-- AND             AND 연산자                               4
+-- OR              OR 연산자                                4
+-- NOT             NOT 연산자
+
+
 -- 동등연산자
 SELECT *
   FROM employees
@@ -104,6 +123,7 @@ SELECT *
 --     - col1 IS NULL (O)
 -- NULL은 공백(' ')이 아님
 -- 오라클에서는 NULL과 empty string('') 을 동일시 함 ( 다른 DBMS에서는 구별)
+
 -- null 비교1
  SELECT *
   FROM employees
@@ -127,7 +147,7 @@ SELECT *
 -- LIKE : 문자열 비교
 --     - last_name like 'da%' : last_name이 da로 시작하는 모든 항목
 --     - last_name like '%d‘ : last_name이 d로 끝나는 모든 항목
---     -'%' 는모든문자를의미
+--     -'%' 는 모든 문자를 의미
 
 -- LIKE 연산자1
 SELECT *
