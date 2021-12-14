@@ -140,7 +140,7 @@ FROM employees
 ORDER BY first_name, last_name desc
 ;
 
-
+-- 사원의 사번과 이름, 급여를 급여가 5000 이상인 급여가 높은 순서로
 SELECT employee_id, first_name, last_name, salary
   FROM employees
  WHERE salary >= 5000
@@ -160,13 +160,14 @@ ORDER BY 2, 3 DESC
 SELECT employee_id, first_name, last_name, email
 FROM employees
 ORDER BY 2, 3, 5;
-
+--> 숫자는 반드시 select 절에 명시한 컬럼 순번이어야 함
 
 -- 숫자를 명시해 정렬3
 -- first_name, last_name, phone_number 기준으로 정렬되지만 phone_number는 보여지지 않음.
 SELECT employee_id, first_name, last_name, email
 FROM employees
 ORDER BY 2, 3, phone_number;
+--> select 절에 없더라도 컬럼 이름으로 정렬 가능
 
 
 -- commission_pct 컬럼으로 오름차순 정렬
@@ -185,6 +186,10 @@ employee_id   first_name    last_name     commission_pct
 SELECT employee_id, first_name, last_name, commission_pct
 FROM employees
 ORDER BY commission_pct DESC;
+
+-- NULL 값 정렬 방법
+--  · NULLS FIRST : NULL 값을 먼저
+--  · NULLS LAST : NULL 값을 나중에
 
 -- NULL을 먼저  
 SELECT employee_id, first_name, last_name, commission_pct
