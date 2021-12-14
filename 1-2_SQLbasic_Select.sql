@@ -112,7 +112,12 @@ SELECT *
  178	       Kimberely    Grant	  KGRANT	011.44.1644.429263   2007/05/24 00:00:00	SA_REP	       7000	     0.15	          149	
     
    
--- ORDER BY 절 실습     
+-- 3. ORDER BY 절    
+--  · SELECT 문과 함께 사용해 데이터를 정렬해 조회
+--  · ORDER BY 컬럼1 [ASC | DESC], 컬럼2 [ASC |DESC], ... 형태 ·오름차순 정렬 : ASC, 생략 가능
+--  · 내림차순 정렬 : DESC
+--  · 컬럼 명이 아닌 SELECT 절에 기술한 컬럼 순서로 명시 가능 (예, ORDER BY 1, 2, 3 .... )
+
 -- 사번 순으로 정렬
 SELECT *
 FROM employees
