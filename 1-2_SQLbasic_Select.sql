@@ -1,6 +1,14 @@
--- SELECT 실습
+-- SELECT
+-- 1. SELECT 문
+-- 기본구문
+SELECT 컬럼1, 컬럼2, ...
+  FROM 테이블명
+ WHERE 조건
+ ORDER BY 정렬순서;
+--  ·SELECT 절 : 컬럼1,컬럼2,...혹은전체컬럼조회시 *명시
+--  ·FROM 절 : 테이블명, 2개 이상 명시할 때는 콤마로 구분
 
--- employees 테이블 조회  
+-- employees 테이블 데이터 전체 조회  
 SELECT *
 FROM EMPLOYEES;
 
@@ -22,6 +30,7 @@ MANAGER_ID              NUMBER(6)
 DEPARTMENT_ID           NUMBER(4) 
 
 -- employees 테이블 일부컬럼 조회  
+-- ·사원의 사번과 이름, 급여
 SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, SALARY
 FROM EMPLOYEES;
 =>
@@ -36,7 +45,12 @@ SELECT *
   
   
 
--- WHERE 절 실습
+-- 2. WHERE 절
+--  - 문자 혹은 문자열 데이터 비교 시, 오라클은 대소문자를 구분함
+--  - 대소문자를 구분하지 않는 DBMS도 상당 수 : 예) MSSQL, MYSQL
+--  - 문자 값 비교 시 작은 따옴표(')로 둘러싸야 한다
+
+
 -- 사번이 100번인 사원 조회 
 SELECT *
   FROM EMPLOYEES
