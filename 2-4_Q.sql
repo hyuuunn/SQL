@@ -20,3 +20,16 @@ SELECT SUBSTR('Is this the real life? Is this just fantasy?',
 
 SELECT LAST_DAY(SYSDATE) + 1
  FROM dual;
+
+-- Q4. EMPLOYEES 테이블에서 사번이 110번 이하인 사원의 입사일자가 현재일자 기준으로 몇 개월이나 지났는지 구하는 문장을 작성해 보세요
+
+SELECT employee_id, first_name, last_name, hire_date,
+       ROUND(MONTHS_BETWEEN(SYSDATE, hire_date))
+  FROM employees
+ WHERE employee_id <= 110;
+ 
+-- Q5. EMPLOYEES 테이블의 PHONE_NUMBER 컬럼에는 사원의 전화번호가 111.111.1111 형태로 저장되어 있는데, 이를 111-111-1111로 바꿔 조회하는 문장을 작성하시오
+
+SELECT employee_id, first_name, last_name,
+       REPLACE(phone_number, '.', '-') phone2
+ FROM employees;
