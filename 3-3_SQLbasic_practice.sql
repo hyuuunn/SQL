@@ -100,12 +100,26 @@ INSERT INTO sale_table values('201903', 1000);
 INSERT INTO sale_table values('201904', 3100);   
 INSERT INTO sale_table values('201905', 800);   
 
+-- UNION (ALL) – 계획 대비 실적
 SELECT yearmon, budget_amt, 0 sale_amt
   FROM budget_table
  UNION 
 SELECT yearmon, 0 budget_amt, sale_amt
   FROM sale_table;
-  
+ORDER BY 1;
+-->
+201901	0	900
+201901	1000	0
+201902	0	2000
+201902	2000	0
+201903	0	1000
+201903	1500	0
+201904	0	3100
+201904	3000	0
+201905	0	800
+201905	1050	0
+
+-- UNION (ALL) – 계획 대비 실적
 SELECT yearmon, 
        SUM(budget_amt) budget, 
        SUM(sale_amt) sale,
@@ -118,15 +132,21 @@ SELECT yearmon,
               )   
   GROUP BY yearmon
   ORDER BY 1;
+-->
+201901	1000	900	90
+201902	2000	2000	100
+201903	1500	1000	67
+201904	3000	3100	103
+201905	1050	800	76
 
 
--- 컬럼을 로우로 
+-- (1.2) UNION (ALL) – 컬럼을 로우로 
 CREATE TABLE test_score (
-    years     VARCHAR2(4),
-    gubun     VARCHAR2(20),
-    korean    NUMBER,
-    english   NUMBER,
-    math      NUMBER );
+    years     VARCHAR2(4),    -- 년도
+    gubun     VARCHAR2(20),   -- 구분(중간,기말)
+    korean    NUMBER,         -- 국어점수
+    english   NUMBER,         -- 영어점수
+    math      NUMBER );       -- 수학점수
     
 INSERT INTO test_score VALUES ('2019', '중간고사', 92, 87, 67);
 INSERT INTO test_score VALUES ('2019', '기말고사', 88, 80, 91);
@@ -138,26 +158,49 @@ SELECT years, gubun, '영어' subject, english score FROM test_score
 UNION ALL
 SELECT years, gubun, '수학' subject, math score FROM test_score
 ORDER BY 2 desc;
+-->
+2019	중간고사	국어	92
+2019	중간고사	영어	87
+2019	중간고사	수학	67
+2019	기말고사	영어	80
+2019	기말고사	수학	91
+2019	기말고사	국어	88
 
--- INTERSECT
+-- (1.3) INTERSECT
+
+--> locations 테이블에서 city와 state_province 값이 같은 값 조회
+SELECT *
+FROM locations;
+
 SELECT state_province dup_loc_name
   FROM locations
 INTERSECT
 SELECT city
   FROM locations
 ORDER BY 1;  
+-->
+Oxford
+Sao Paulo
+Utrecht
+
 
 SELECT state_province, city
   FROM locations 
  WHERE state_province = city
 ORDER BY 1;
+-->
+Oxford	Oxford
+Sao Paulo	Sao Paulo
+Utrecht	Utrecht
+
 
 -- 보너스 문제
+-- · GROUPBYMULTIPLY 테이블 생성
 create table GROUPBYMULTIPLY (
   department_name  VARCHAR2(100),
   num_data         NUMBER 
 );
-
+-- · GROUPBYMULTIPLY 테이블 데이터 입력
 insert into groupbymultiply values ('dept1', 10);
 insert into groupbymultiply values ('dept1', 20);
 insert into groupbymultiply values ('dept1', 30);
@@ -170,18 +213,26 @@ insert into groupbymultiply values ('dept3', 12);
 
 commit;
 
-
+-- ·GROUPBYMULTIPLY 테이블 조회
 SELECT *
 FROM groupbymultiply;
 
-
+-- · GROUPBYMULTIPLY 테이블 집계
 SELECT department_name,
         SUM(num_data)
 FROM groupbymultiply
 GROUP BY department_name
 ORDER BY 1 ;
 
+-- · GROUPBYMULTIPLY 테이블 문제
+-- Department_name 별로 num_data 컬럼 값을 더하는 것이 아니라 곱한 결과를 조회하는 쿼리를 작성하시오.
 
+--    · SUM 함수는 값을 모두 더함
+--    · 곱하기를 더하기로 변환이 필요
+--    · 로그의 덧셈 공식
+--    · 로그 덧셈 -> exp 함수를 사용해 변환
+
+-- · GROUPBYMULTIPLY 테이블 집계
 SELECT department_name
       ,EXP(SUM(LN(num_data))) multiply_result
 FROM groupbymultiply
