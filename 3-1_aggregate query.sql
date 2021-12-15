@@ -140,8 +140,14 @@ ORDER BY 1, 2;
 --> 그룹 함수는 WHERE 절에서 사용 불가
 
 
--- having 절
--- 13. 오류 쿼리
+-- 5. HAVING 절
+--  · 집계 쿼리에서 집계 함수 반환 값에 대한 조건을 걸 때 사용
+--  · 일반적인 조건WHERE 절, HAVING 절집계 쿼리에 대한 추가 조건 절
+--  · 예) 한 반에서 과목별 평균 점수가 60점 이상인 과목을 조회
+--          - 집계 쿼리로 평균 값 산출 : AVG(점수)
+--          - WHERE AVG(점수) >= 60  -> X
+--          - HAVING AVG(점수) >= 60 -> O
+-- 13 오류 쿼리
 SELECT TO_CHAR(hire_date, 'YYYY') HIRE_YEAR, department_id, COUNT(*), SUM(salary), ROUND(AVG(salary),0)
 FROM employees
 WHERE ROUND(AVG(salary),0) >= 5000
@@ -163,12 +169,16 @@ GROUP BY TO_CHAR(hire_date, 'YYYY'), department_id
 HAVING COUNT(*) > 1
 ORDER BY 1, 2;
 
+
+-- 6. DISTINCT
+--  · SELECT DISTINCT expr1, expr2 ... FROM ...
+--  · DISTINCT 뒤에 명시한 표현식(컬럼)의 고유한 값을 조회
+--  · 집계 함수 없이 GROUP BY 절을 사용한 것과 동일한 효과
 -- 16
 SELECT job_id
 FROM employees
 GROUP BY job_id;
 
--- 17
 SELECT DISTINCT job_id
 FROM employees;
 
@@ -178,6 +188,17 @@ FROM employees
 ORDER BY 1, 2;
 
 ----------------------------------------------------------
+-- 8. Rollup과 Cube
+
+-- ·Rollup : 소계(Sub Total)
+    ·SELECT COL1, COL2, SUM(COL3)
+        FROM TABLE1
+       GROUP BY ROLLUP(COL1, COL2) ...
+-- -> COL1에 대한 소계, COL1과 COL2의 계, 그리고 전체 합계 계산
+--·ROLLUP에 명시한 표현식 수(콤마로 구분) + 1개를 Grouping 예) .... ROLLUP(col1, col2)
+-- -> col1과 col2에 대한 합계, col1에 대한 합계, 전체 합계
+
+
 -- 19
 SELECT  substr(phone_number,1,3), JOB_ID, SUM(salary)
 FROM EMPLOYEES
