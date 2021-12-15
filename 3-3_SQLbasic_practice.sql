@@ -1,5 +1,12 @@
 -- 집계 쿼리 실습 
 -- (1) 급여가 10000 이상인 사원의 평균 급여를 구하라
+
+--  ·대상 테이블 : EMPLOYEES
+--  ·급여가 10000 이상인 조건
+--    -> salary >= 10000
+--  ·평균 급여
+--    -> AVG 집계 함수 사용
+      
 SELECT AVG(salary)
   FROM employees
  WHERE salary >= 10000;
@@ -9,6 +16,14 @@ SELECT ROUND(AVG(salary), 0)
  WHERE salary >= 10000;
 
 -- (2) 입사 월별 사원수를 구하라
+
+--  ·대상 테이블 : EMPLOYEES
+--  ·입사월
+--    -> 입사일자인 hire_date 컬럼 가공 필요
+--    -> TO_CHAR(hire_date, 'MM')
+--  ·사원수
+--    -> COUNT 집계 함수 사용
+
 SELECT TO_CHAR(hire_date, 'MM'), COUNT(*)
   FROM employees
 GROUP BY TO_CHAR(hire_date, 'MM')
@@ -20,8 +35,18 @@ SELECT TO_CHAR(hire_date, 'day'), COUNT(*)
 GROUP BY TO_CHAR(hire_date, 'day')
 ORDER BY 1;
 
+SELECT TO_CHAR(hire_date, 'D'), COUNT(*)
+  FROM employees
+GROUP BY TO_CHAR(hire_date, 'D')
+ORDER BY 1;
+--> D =>  요일을 숫자로 표현. 일요일 = 1
 
 -- (3) 이름이 동일한 사원과 동일인 수를 구하라
+
+--  ·대상 테이블 : EMPLOYEES ·이름
+--    -> first_name 컬럼
+--  ·사원수
+--    -> COUNT 집계 함수 사용
 SELECT  *
   FROM employees
 ORDER BY first_name;
@@ -43,7 +68,17 @@ SELECT first_name
 
   
 -- 집합연산자 활용
+
+-- (1) UNION (ALL)
+--  · UNION 과 UNION ALL은 쓰임새가 같음 (중복 데이터 제거만 차이)
+--  · 구조가 다른 여러 테이블에서 동일한 형태의 데이터를 추출하는 경우
+--  ·컬럼을 로우 형태로 전환해 조회할 경우
+
+
 -- 1.예산 대비 실적 
+-- (1.1) UNION (ALL) – 계획 대비 실적
+
+--  · 예산 테이블 (budget_table)
 create table budget_table (
      yearmon      VARCHAR2(6),
      budget_amt   NUMBER     );
@@ -54,6 +89,7 @@ INSERT INTO budget_table values('201903', 1500);
 INSERT INTO budget_table values('201904', 3000);   
 INSERT INTO budget_table values('201905', 1050);   
 
+--  · 매출 테이블 (sale_table)
 create table sale_table (
      yearmon      VARCHAR2(6),
      sale_amt     NUMBER     );
