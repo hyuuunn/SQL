@@ -1,3 +1,21 @@
+-- 1. 집계 쿼리
+--  ·GROUP BY 절과 집계 함수를 사용한 쿼리
+--  ·특정 항목(컬럼)별 최소, 최대, 평균 값 등을 산출
+--  ·과목별 평균 점수, 월별 전체 매출액 등 기본적인 데이터 분석에 사용됨
+--  ·GROUP BY 절과 집계 함수 단독 사용 가능하나, 일반적으로 둘 모두를 함께 사용
+
+-- 2. GROUP BY 절
+--  ·구문
+SELECT expr1, expr2, ...
+  FROM ...
+ WHERE ...
+ GROUP BY expr1, expr2 ...
+ ORDER BY ... ;
+--  ·WHERE 절과 ORDER BY 절 사이에 위치
+--  · GROUP BY 절에 기술한 컬럼이나 표현식 별로 데이터가 집계
+--  · GROUP BY 절에 기술한 컬럼, 표현식 이외의 항목은 SELECT 절에 명시 불가. 단, 집계 함수는 가능
+--  ·GROUP BY 절과 집계 함수를 함께 사용해야 의미 있는 결과를 도출
+
 -- GROUP BY 절
 -- 1
 SELECT employee_id
