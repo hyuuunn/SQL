@@ -7,9 +7,22 @@ SELECT country_id, COUNT(*)
  GROUP BY country_id
  ORDER BY country_id;
  
--- Q-2. employees 테이블에서 년도에 상관 없이 분기별로 몇 명의 사원이 입사했는지 구하는 쿼리를 작성해 보세요.
+-- Q2. employees 테이블에서 년도에 상관 없이 분기별로 몇 명의 사원이 입사했는지 구하는 쿼리를 작성해 보세요.
 
 SELECT TO_CHAR(hire_date, 'Q'), COUNT(*)
   FROM employees
  GROUP BY TO_CHAR(hire_date, 'Q')
+ ORDER BY 1;
+
+-- Q3. 다음 쿼리는 employees 테이블에서 job_id별로 평균 급여를 구한 것인데, 여기서 평균을 직접 계산하는 avg_salary1 이란 가상컬럼을 추가해 보세요.
+      ( 평균 = 총 금액 / 사원수)
+SELECT job_id, ROUND(AVG(salary),0) avg_salary
+  FROM employees
+ GROUP BY job_id
+ ORDER BY 1;
+-->
+SELECT job_id, ROUND(AVG(salary),0) avg_salary,
+ ROUND(SUM(salary) / COUNT(*), 0)
+  FROM employees
+ GROUP BY job_id
  ORDER BY 1;
