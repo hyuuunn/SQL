@@ -26,3 +26,12 @@ SELECT job_id, ROUND(AVG(salary),0) avg_salary,
   FROM employees
  GROUP BY job_id
  ORDER BY 1;
+
+-- Q4. COVID19_TEST 테이블에서 한국(ISO_CODE 값이 KOR)의 월별 코로나 확진자 수를 조회하는 문장을 작성하시오.
+
+SELECT TO_CHAR(dates, 'YYYY-MM') MONTHS, SUM(new_cases)
+  FROM covid19_test
+ WHERE iso_code = 'KOR'
+ GROUP BY TO_CHAR(dates, 'YYYY-MM')
+ ORDER BY 1;
+     
