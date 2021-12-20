@@ -1,5 +1,22 @@
--- 분석 함수
--- 1.부서별로 사원의 급여 순 순번
+-- 1. 분석함수 (Analytic Function)
+--     · 로우별 그룹을 지정해서 값을 집계하는 함수
+--     · GROUP BY 절과는 다름
+--     · GROUP BY 절 사용 시, 집계 대상에 따라 로우 수가 줄어들지만, 분석함수는 그렇지 않음
+--       -> 로우 수는 그대로, 집계 값 산출이 가능
+--     · 분석함수에서 말하는 로우별 그룹 -> 윈도우(Window)절
+--     · 분석 함수와 윈도우 절이 같이 사용됨
+--     · 일반 집계 함수(SUM, MAX, MIN, AVG 등)를 분석 함수로 사용 가능
+--     · 그 외에 ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD 함수가 있음
+--     ·분석 함수 구문
+--     분석 함수 OVER ( PARTITION BY col1, col2, ...
+                      ORDER BY col1, col2...)
+--     ·PARTITION BY : 분석 함수 집계 대상이 되는 로우 값의 범위, 그룹
+--     ·PARTITION BY 절 생략 시, 전체 로우가 분석 함수 집계 대상이 됨
+--     ·ORDER BY : 분석 함수 계산 시, 고려되는 로우 순서
+ 
+
+-- 분석 함수 – row_number() : 일련번호
+-- 1-1.부서별로 사원의 급여 순 순번
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        ROW_NUMBER() OVER (PARTITION BY b.department_id
@@ -10,7 +27,7 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ;
  
--- 2.부서별로 사원의 급여가 높은 순 순번
+-- 1-2.부서별로 사원의 급여가 높은 순 순번
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        ROW_NUMBER() OVER (PARTITION BY b.department_id
@@ -21,7 +38,7 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ;
  
--- 3.전 사원의 급여가 높은 순으로 순번을 구하라
+-- 1-3.전 사원의 급여가 높은 순으로 순번을 구하라
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        ROW_NUMBER() OVER ( ORDER BY a.salary desc ) dept_sal_seq,
@@ -30,6 +47,7 @@ SELECT b.department_id, b.department_name,
        departments b
  WHERE a.department_id = b.department_id
  ORDER BY 4 ; 
+--> PARTITION BY 
  
 -- 4.부서별로 사원의 급여가 높은 순 순위
 SELECT b.department_id, b.department_name,
