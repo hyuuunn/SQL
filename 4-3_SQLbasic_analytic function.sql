@@ -126,7 +126,7 @@ SELECT b.department_id, b.department_name,
  ORDER BY 2, 4 ;  
  
  
--- 1-10. LAG와 LEAD 함수 사용 
+-- 1-10. LAG와 LEAD 함수 사용 => 전년 동월 대비 매출 신장율
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.hire_date,
