@@ -15,7 +15,7 @@
 --     ·ORDER BY : 분석 함수 계산 시, 고려되는 로우 순서
  
 
--- 분석 함수 – row_number() : 일련번호
+-- 1. 분석 함수 – row_number() : 일련번호
 -- 1-1.부서별로 사원의 급여 순 순번
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
@@ -47,9 +47,10 @@ SELECT b.department_id, b.department_name,
        departments b
  WHERE a.department_id = b.department_id
  ORDER BY 4 ; 
---> PARTITION BY 
- 
--- 4.부서별로 사원의 급여가 높은 순 순위
+--> 전체에 대한 것이므로 PARTITION BY 
+
+-- 1. 분석 함수 – RANK() : 순위
+-- 1-4.부서별로 사원의 급여가 높은 순 순위
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        RANK() OVER (PARTITION BY b.department_id
@@ -60,8 +61,8 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ;
  
- 
--- 5. 부서별로 사원의 급여가 높은 순 누적순위
+-- 1. 분석 함수 – DENSE_RANK() : 누적순위
+-- 1-5. 부서별로 사원의 급여가 높은 순 누적순위
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        DENSE_RANK() OVER (PARTITION BY b.department_id
@@ -71,8 +72,9 @@ SELECT b.department_id, b.department_name,
        departments b
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ;
- 
--- 6.부서별, 입사일자 순, 직후 사원의 급여
+
+-- 1. 분석 함수 – LEAD(expr) : 후행 로우값
+-- 1-6.부서별, 입사일자 순, 직후 사원의 급여
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.hire_date,
@@ -84,8 +86,8 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ;
  
- 
--- 7.부서별, 입사일자 순, 직후 사원의 급여
+-- 1. 분석 함수 - LEAD(expr, offset, default) : 후행 로우값
+-- 1-7.부서별, 입사일자 순, 직후 사원의 급여
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.hire_date,
@@ -98,7 +100,7 @@ SELECT b.department_id, b.department_name,
  ORDER BY 2, 4 ; 
  
  
- -- 8.부서별, 입사일자 순, 2 로우 후 사원의 급여
+ -- 1-8.부서별, 입사일자 순, 2 로우 후 사원의 급여
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.hire_date,
@@ -110,8 +112,8 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ; 
  
- 
--- 9.부서별, 입사일자 순, 직전 사원의 급여
+-- 1. 분석함수 – LAG(expr, offset, default) : 선행 로우값 
+-- 1-9.부서별, 입사일자 순, 직전 사원의 급여
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.hire_date,
@@ -124,7 +126,7 @@ SELECT b.department_id, b.department_name,
  ORDER BY 2, 4 ;  
  
  
--- 10. LAG와 LEAD 함수 사용 
+-- 1-10. LAG와 LEAD 함수 사용 
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.hire_date,
@@ -138,8 +140,8 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4 ;   
  
- 
--- 11.부서별 평균 급여와 사원 급여를 동시에 조회
+-- 1. 분석함수 – 집계 함수 사용 
+-- 1-11.부서별 평균 급여와 사원 급여를 동시에 조회
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
        a.salary , 
@@ -150,7 +152,7 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 3;
 
-
+-- 1. 분석함수 – 집계 함수 사용 
 -- 12.사원의 급여와 부서별 누적 급여 조회
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
@@ -163,7 +165,7 @@ SELECT b.department_id, b.department_name,
  WHERE a.department_id = b.department_id
  ORDER BY 2, 4;
 
-
+-- 1. 분석함수 – RATIO_TO_REPORT() 
 -- 13. 부서별 사원 급여의 비율
 SELECT b.department_id, b.department_name,
        a.first_name || ' ' || a.last_name as emp_name,
