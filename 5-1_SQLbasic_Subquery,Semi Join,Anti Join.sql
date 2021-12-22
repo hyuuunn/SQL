@@ -297,7 +297,8 @@ SELECT *
               ) ;
 -->1. 서브쿼리 내에서 employees와 departments 테이블 조인
 -->2. EXISTS 연산자는 존재하는지를 체크
--->3. 이미 체크를 했으니 서브쿼리의 SELECT 절에는 아무 거나 명시              
+-->3. 이미 체크를 했으니 서브쿼리의 SELECT 절에는 아무 거나 명시 
+--> SELECT  1 에서 1은 아무 의미 없음. 0,a 아무거나 써도 됨. 대신 아무것도 없으면 
 
 -- 3
 SELECT *
@@ -357,6 +358,10 @@ SELECT department_id, AVG(salary)
 
 
 ------------------------------------------------------------
+-- 5. 세미 조인 (Semi Join)
+--     · 두 번째 테이블에 있는 로우와 조건이 맞는 첫 번째 테이블의 로우 반환
+--     · 메인쿼리와중첩서브쿼리를사용할때사용하는조인
+--     · WHERE 절에서 EXISTS 연산자를 사용
 
 -- 세미조인
 -- 2. Exists 연산자 사용                            
@@ -367,6 +372,11 @@ SELECT *
                 WHERE a.employee_id = b.employee_id)
  ORDER BY 1;                                           
 
+
+-- 6. 안티 조인 (Anti Join)
+--     · 세미 조인에서 NOT 연산자 사용하는 조인 
+--     · 서브쿼리와의 조인조건에 부합하지 않는 건을 조회
+
 -- 안티조인
 SELECT a.employee_id, 
        a.first_name || ' ' || a.last_name
@@ -374,6 +384,8 @@ SELECT a.employee_id,
  WHERE a.employee_id NOT IN ( SELECT employee_id
                                 FROM job_history )
  ORDER BY 1;
+-->  1. job_history에 없는 사원 조회
+--> 2. 결국 직급 변경이 없는 사원만 조회
 
 SELECT a.employee_id, 
        a.first_name || ' ' || a.last_name
@@ -382,3 +394,5 @@ SELECT a.employee_id,
                       FROM job_history  b
                      WHERE a.employee_id = b.employee_id)
  ORDER BY 1; 
+--> 1. job_history에 없는 사원 조회
+--> 2. 결국 직급 변경이 없는 사원만 조회
