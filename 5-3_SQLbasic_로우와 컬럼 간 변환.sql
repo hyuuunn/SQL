@@ -1,11 +1,13 @@
--- 로우를 컬럼으로 
+-- 1. 테이블에 있는 로우를 컬럼 형태로 변환하기
+
+-- · score_table 생성
 CREATE TABLE score_table (
        YEARS     VARCHAR2(4),   -- 연도
        GUBUN     VARCHAR2(30),  -- 구분(중간/기말)
     SUBJECTS     VARCHAR2(30),  -- 과목
        SCORE     NUMBER );      -- 점수 
        
-       
+-- · score_table 데이터 입력       
 INSERT INTO score_table VALUES('2020','중간고사','국어',92);
 INSERT INTO score_table VALUES('2020','중간고사','영어',87);
 INSERT INTO score_table VALUES('2020','중간고사','수학',67);
@@ -20,11 +22,11 @@ INSERT INTO score_table VALUES('2020','기말고사','지리',89);
 INSERT INTO score_table VALUES('2020','기말고사','독일어',83);
 COMMIT;       
 
-
+-- · score_table 조회
 SELECT *
   FROM score_table;
   
-  
+-- 1.로우를 컬럼으로 – CASE 사용
 SELECT years,
        gubun,
        CASE WHEN subjects = '국어'   THEN score ELSE 0 END "국어",
@@ -52,7 +54,7 @@ SELECT years, gubun,
      )
   GROUP BY years, gubun;
   
-  
+-- 1. 로우를 컬럼으로 – decode로 변환  
 SELECT years, gubun,
        SUM(국어) AS 국어, SUM(영어) AS 영어, SUM(수학) AS 수학,
        SUM(과학) AS 과학, SUM(지리) AS 지리, SUM(독일어) AS 독일어
@@ -68,7 +70,8 @@ SELECT years, gubun,
      )
   GROUP BY years, gubun;  
   
-  
+-- 1. 로우를 컬럼으로 – WITH 절 사용
+   
 WITH mains AS ( SELECT years, gubun,
                        CASE WHEN subjects = '국어'   THEN score ELSE 0 END "국어",
                        CASE WHEN subjects = '영어'   THEN score ELSE 0 END "영어",
@@ -84,15 +87,17 @@ SELECT years, gubun,
  FROM mains
 GROUP BY years, gubun;  
 
-
+-- 1. 로우를 컬럼으로 – PIVOT 절 사용
 SELECT *
   FROM ( SELECT years, gubun, subjects, score
           FROM score_table )
  PIVOT ( SUM(score)
           FOR subjects IN ( '국어', '영어', '수학', '과학', '지리', '독일어')
         );
-        
--- 컬럼을 로우로 
+
+-- 2. 컬럼을 로우로
+
+-- · score_col_table 생성
 CREATE TABLE score_col_table  (
     YEARS     VARCHAR2(4),   -- 연도
     GUBUN     VARCHAR2(30),  -- 구분(중간/기말)
@@ -104,7 +109,7 @@ CREATE TABLE score_col_table  (
     GERMAN    NUMBER         -- 독일어점수
     );        
     
-    
+-- ·score_col_table 데이터 입력    
 INSERT INTO score_col_table
 VALUES ('2020', '중간고사', 92, 87, 67, 80, 93, 82 );
 
@@ -116,7 +121,7 @@ COMMIT;
 SELECT *
   FROM score_col_table;
     
-    
+-- 2. 컬럼을 로우로 – UNION ALL 사용    
 SELECT YEARS, GUBUN, '국어' AS SUBJECT, KOREAN AS SCORE
   FROM score_col_table
  UNION ALL
@@ -137,7 +142,7 @@ SELECT YEARS, GUBUN, '독일어' AS SUBJECT, GERMAN AS SCORE
  ORDER BY 1, 2 DESC;    
  
  
- 
+-- 2. 컬럼을 로우로 – UNPIVOT절 사용 
 SELECT *
   FROM score_col_table
 UNPIVOT ( score
@@ -150,7 +155,7 @@ UNPIVOT ( score
                             )
         ); 
         
-        
+ ------------------------?       
 CREATE OR REPLACE TYPE obj_subject AS OBJECT (
       YEARS     VARCHAR2(4),   -- 연도
       GUBUN     VARCHAR2(30),  -- 구분(중간/기말)
