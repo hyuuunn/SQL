@@ -25,6 +25,11 @@
 --            - 조인 하는 것이 일반적
 --            - 조인을 안하면 여러 건이 조회될 가능성이 많음
 --            - 조인을 한다는 것은 연관성 있는 서브쿼리란 뜻
+--     · 다른 테이블에 있는 값을 가져올 때 사용 가능한 방법
+--            - 스칼라 서브쿼리
+--            - 조인(외부조인)
+--            - 사용자 정의 함수 (get_dept_name – 3차시)
+--     · 스칼라 서브쿼리나 사용자 정의 함수는 가급적 사용 자제 -> 성능 상 좋지 않음
 
 -- 스칼라 서브쿼리 
 
@@ -124,7 +129,22 @@ SELECT a.employee_id,
   FROM employees a
  ORDER BY 1;
 
- 
+-- 3. 인라인 뷰 (Inline View)
+--     · 메인쿼리의 FROM 절에 위치
+--     · 서브쿼리 자체가 마치 하나의 테이블 처럼 동작
+--     · 서브쿼리가 최종 반환하는 로우와 컬럼, 표현식 수는 1개 이상 가능
+--     · 서브쿼리에 대한 별칭(Alias)은 반드시 명시
+--     · 메인쿼리와 조인조건은 메인 쿼리의 WHERE 절에서 처리가 일반적 
+--     · 인라인 뷰가 필요한 이유
+--            - 기존 단일 테이블만 읽어서는 필요한 정보를 가져오기가 어려울 때
+--              예, 특정 조건으로 집계한 결과와 조인 필요 시
+--            - 인라인 뷰의 쿼리가 여러 테이블을 조인해 읽어오는 경우가 많음
+--            - 복잡한 쿼리의 경우, 쿼리 작성을 좀 더 직관적으로 사용하기 위해
+--     · LATERAL 키워드 사용 시 서브쿼리 내에서 조인 가능 -> 스칼라 서브쿼리처럼 동작
+--            - 과거 서브쿼리 내에서는 메인 쿼리 참조가 불가능 (조인 불가)
+--            - 12c 부터 추가된 기능
+--            - 서브쿼리 앞에 LATERAL 명시할 경우 메인 쿼리 컬럼 참조 가능
+
 -- 인라인 뷰
 -- 1
 SELECT a.employee_id,
@@ -132,13 +152,15 @@ SELECT a.employee_id,
        a.department_id, 
        c.dept_name
 FROM employees a,
-    ( SELECT b.department_id, 
-             b.department_name  dept_name
-        FROM departments b 
-    ) c
-WHERE a.department_id = c.department_id
+    ( SELECT b.department_id,  **
+             b.department_name  dept_name **
+        FROM departments b  **
+    ) c **
+WHERE a.department_id = c.department_id ***
 ORDER BY 1;
- 
+--> **   하나의 테이블 역할
+--> ***  메인 쿼리의 WHERE 절에 조인 조건 기술
+
 -- 2 
 SELECT a.employee_id,
        a.first_name || a.last_name emp_name,
@@ -148,10 +170,10 @@ FROM employees a,
     ( SELECT b.department_id, 
              b.department_name  dept_name
         FROM departments b
-       WHERE a.department_id = b.department_id
+       WHERE a.department_id = b.department_id **
     ) c
 ORDER BY 1; 
-  
+--> 오류.  ** 서브 쿼리 내에서 조인 조건 불가능  
 -- 3 
 SELECT a.employee_id,
        a.first_name || a.last_name emp_name,
@@ -161,9 +183,10 @@ FROM employees a,
      LATERAL ( SELECT b.department_id, 
                       b.department_name  dept_name
                 FROM departments b
-               WHERE a.department_id = b.department_id
+               WHERE a.department_id = b.department_id **
              ) c
   ORDER BY 1;   
+-->  **12c 이후 버전에서는 LATERAL 사용해 서브 쿼리 내에서 조인 조건 가능
 
 -- 4
 SELECT a.employee_id,
@@ -202,11 +225,11 @@ FROM employees a
         FROM countries c,
              regions r
        WHERE c.region_id = r.region_id 
-         AND c.country_id = dept_loc.country_id
+         AND c.country_id = dept_loc.country_id **
      ) reg
  WHERE a.department_id = dept_loc.department_id
  ORDER BY 1;
- 
+--> 오류. **dept_loc.country_id 컬럼 참조 불가능 
  
 -- 6
 SELECT a.employee_id,
@@ -226,11 +249,12 @@ FROM employees a
         FROM countries c,
              regions r
        WHERE c.region_id = r.region_id 
-         AND c.country_id = dept_loc.country_id
+         AND c.country_id = dept_loc.country_id **
      ) reg
  WHERE a.department_id = dept_loc.department_id
  ORDER BY 1; 
-          
+--> ** LATERAL 키워드 사용해 dept_loc.country_id 컬럼 참조 가능
+
 -- 7
 SELECT a.department_id, a.last_name, a.salary,
        k.department_id second_dept_id,
@@ -241,7 +265,18 @@ SELECT a.department_id, a.last_name, a.salary,
          GROUP BY b.department_id
       ) k
  WHERE a.department_id = k.department_id     
-ORDER BY a.department_id;       
+ORDER BY a.department_id;     
+-->  1. 부서별 평균 급여를 서브쿼리에서 구한 뒤
+-->  2. 사원 급여와 부서 평균 급여를 같이 조회
+
+
+-- 4. 중첩 서브쿼리 (Nested Subquery)
+--     · 메인쿼리의 WHERE 절에 위치
+--     · 서브쿼리가 조건절의 일부로 사용됨
+--     · 서브쿼리 최종 반환 값과 메인쿼리 테이블의 특정 컬럼 값을 비교 시 사용
+--     · 서브쿼리가 최종 반환하는 로우와 컬럼, 표현식 수는 1개 이상 가능
+--     · 조건절의 일부이므로 서브쿼리에 대한 별칭(Alias) 사용 불가
+--     · 서브쿼리 내에서 메인쿼리와 조인 가능
           
 -- 중첩 서브쿼리
 -- 1
@@ -250,6 +285,8 @@ SELECT *
  WHERE department_id IN ( SELECT department_id
                             FROM employees
                         ) ;
+--> 1. employees 테이블에 있는 department_id 조회
+--> 2. departments 테이블에서 이 서브쿼리에서 반환하는 값이 포함된 건만 조회
 
 -- 2
 SELECT *
@@ -258,6 +295,9 @@ SELECT *
                   FROM employees b
                  WHERE a.department_id = b.department_id 
               ) ;
+-->1. 서브쿼리 내에서 employees와 departments 테이블 조인
+-->2. EXISTS 연산자는 존재하는지를 체크
+-->3. 이미 체크를 했으니 서브쿼리의 SELECT 절에는 아무 거나 명시              
 
 -- 3
 SELECT *
@@ -266,6 +306,9 @@ SELECT *
                   FROM employees b
                  WHERE a.department_id = b.department_id
                    AND b.salary > 10000 );
+--> 1. 서브쿼리 내에서 employees와 departments 테이블 조인
+--> 2. 조인 조건 외에 급여값이 10000 보다 큰 조건 추가
+--> 3. 결국 급여가 10000 초과인 사원이 속한 부서 정보가 조회됨
 
 -- 4                   
 SELECT employee_id,
@@ -276,6 +319,8 @@ SELECT employee_id,
  WHERE (job_id, salary ) IN ( SELECT job_id, min_salary
                                 FROM jobs)
 ORDER BY 1;                            
+--> 1. job_id, salary 두 값을 동시에 비교
+--> 2. job_id별 최소 급여를 받는 사원이 조회됨
 
 -- 5
 SELECT last_name, employee_id
@@ -288,6 +333,7 @@ WHERE e.department_id = d.department_id
                                            FROM employees
                                           WHERE last_name = 'Pataballa')
 ORDER BY last_name, employee_id;
+-->  Pataballa란 사원의 salary와 commission_pct 합보다 큰 사원 조회
 
 -- 6
 SELECT department_id, employee_id, last_name, salary
@@ -296,13 +342,13 @@ SELECT department_id, employee_id, last_name, salary
                    FROM employees b
                   WHERE a.department_id = b.department_id)
 ORDER BY department_id;
+-->  1. employees 테이블에서 자신이 속한 부서의 평균 급여보다 많이 받는 사원 조회
 
-
-
+-- 6-1
 SELECT department_id, employee_id, last_name, salary
   FROM employees a
 ORDER BY department_id;
-
+-- 6-2
 SELECT department_id, AVG(salary)
   FROM employees b
  GROUP BY department_id
