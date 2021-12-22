@@ -1,6 +1,34 @@
+-- 1. 서브쿼리 (Subquery) - 개요
+--     · 일반적인 쿼리(메인, 주 쿼리) 안에 있는 또 다른 쿼리 -> 보조, 하위 쿼리 
+--     · 메인 쿼리와 서브쿼리가 합쳐져 한 문장을 이룸
+--     · 서브쿼리는 하나의 SELECT 문장으로, 괄호로 둘러싸인 형태
+--     · 메인 쿼리 기준으로 여러 개의 서브 쿼리 사용 가능
+
+--     1. 서브쿼리 (Subquery) - 종류
+--     · 서브 쿼리 위치에 따라
+--            - 스칼라 서브쿼리 (Scalar Subquery) - 인라인 뷰 (Inline View)
+--            - 중첩 서브쿼리 (Nested Subquery)
+--     · 메인쿼리와의 연관성
+--            - 연관성 있는(Correlated) 서브쿼리 : 메인쿼리와 조인
+--            - 연관성 없는(Noncorrealted) 서브쿼리 : 메인쿼리와 독립적
+--     ·주로 서브쿼리 위치에 따른 분류를 사용
+
+--     2. 스칼라 서브쿼리 (Scalar Subquery)
+--     · 메인쿼리의 SELECT 절에 위치한 서브쿼리
+--     · SELECT 절에서 마치 하나의 컬럼이나 표현식 처럼 사용
+--     · 스칼라(Scalar) : 크기만 가지는 값, 양을 의미 (수학, 물리)
+--     · 서브쿼리 수행 결과가 하나의 값이 되므로 스칼라 서브쿼리라고 함(?)
+--     · 서브쿼리가 최종 반환하는 로우 수는 1개
+--     · 서브쿼리가 최종 반환하는 컬럼이나 표현식도 1개
+--     · 서브쿼리에 별칭(Alias)을 주는 것이 일반적 -> 하나의 컬럼 역할을 하므로
+--     · 서브쿼리 내에서 메인 쿼리와 조인 가능
+--            - 조인 하는 것이 일반적
+--            - 조인을 안하면 여러 건이 조회될 가능성이 많음
+--            - 조인을 한다는 것은 연관성 있는 서브쿼리란 뜻
+
 -- 스칼라 서브쿼리 
 
--- 1
+-- 1 ·사용 예 – 부서명 가져오기
 SELECT a.employee_id,
        a.first_name || ' ' || a.last_name emp_name,
        a.department_id, 
@@ -9,7 +37,8 @@ SELECT a.employee_id,
           WHERE a.department_id = b.department_id ) dept_name
   FROM employees a
  ORDER BY 1;
- 
+--> 부서명 처럼 특정 코드 명칭을 가져올 때 스칼라 서브쿼리를 사용하는 경우가 많음 
+
 -- 2
 SELECT a.employee_id,
        a.first_name || ' ' || a.last_name emp_name,
@@ -19,7 +48,7 @@ SELECT a.employee_id,
        ) dept_name
   FROM employees a
  ORDER BY 1;
- 
+--> 부서명 전체를 가져오므로 오류 발생 
 
 -- 3
 SELECT a.employee_id,
@@ -30,6 +59,7 @@ SELECT a.employee_id,
           WHERE a.department_id = b.department_id ) dept_name
   FROM employees a
  ORDER BY 1; 
+--> 건수는 1건을 가져오지만, 두 개의 컬럼 값을 가져오므로 오류
  
 -- 4
 SELECT a.employee_id, 
@@ -39,8 +69,9 @@ SELECT a.employee_id,
           WHERE a.job_id = b.job_id ) job_names
 FROM employees a
 ORDER BY 1;
+--> job_title, job_id 두 컬럼을 사용하지만, 문자열 연결 연산자로 결합되어 최종 반환 값은 1개
 
--- 5-1
+-- 5-1  조인
 SELECT a.employee_id,
        a.first_name || ' ' || a.last_name emp_name,
        a.department_id, 
@@ -50,7 +81,7 @@ SELECT a.employee_id,
  WHERE a.department_id = b.department_id   
  ORDER BY 1;
 
--- 5-2
+-- 5-2  스칼라 서브쿼리
 SELECT a.employee_id,
        a.first_name || ' ' || a.last_name emp_name,
        a.department_id, 
@@ -59,6 +90,19 @@ SELECT a.employee_id,
           WHERE a.department_id = b.department_id ) dept_name
   FROM employees a
  ORDER BY 1;
+ --> 178번 사원은 조인에서는 누락, 서브쿼리에서는 조회됨
+ --> 스칼라 서브쿼리는 성능상 좋지 않음, 따라서 과도한 사용은 자제
+ 
+-- 5-3 외부조인
+SELECT a.employee_id,
+       a.first_name || ' ' || a.last_name emp_name,
+       a.department_id,
+       b.department_name
+ FROM employees a
+ LEFT JOIN departments b
+  ON a.department_id = b.department_id
+ ORDER BY 1;
+--> 외부 조인(LEFT JOIN)을 사용하면 178번 사원이 누락되지 않음
  
 -- 6
 SELECT a.employee_id,
