@@ -1,3 +1,35 @@
+-- 1. WITH 절 or CTE (Common Table Expression)
+--    · 서브쿼리의 일종
+--    · WITH 절(clause)이라고도 하고 CTE 라고도 함
+--    · 하나의 서브쿼리를 또 다른 서브쿼리에서 참조하여 재 사용 가능한 구문
+--    · 오라클 11g 까지는 하나의 서브쿼리에서 다른 서브쿼리 참조 못했음
+--          ->W ITH 절 사용
+--          -> 오라클 12c 부터는 LATERAL 키워드 사용해 가능
+--    · WITH절 구문
+            WITH alias1 AS ( SELECT ...
+                                FROM ... ),
+                 alias2 AS ( SELECT ...
+                                FROM ... ),
+                 ....
+                 alias_last AS (SELECT ...
+                                FROM... )
+            SELECT ...
+               FROM alias_last
+            ...;
+--    · WITH 별칭 AS 다음에 서브쿼리 형태
+--    · WITH은 한 번만 명시, 서브쿼리는 여러 개 사용 가능
+--    · 최종 반환 결과는 마지막에 있는 메인 쿼리
+--    · 서브쿼리 내에서 다른 서브쿼리 참조 가능
+--          ->서브쿼리 내의 FROM 절에서 다른 서브쿼리 별칭을 기술해 인라인 뷰처럼 사용 가능
+--    · 메인 쿼리에서는 FROM 절에서 서브쿼리 한 개, 혹은 여러 개의 서브쿼리 조인해 결과 조회 가능
+
+-- 2. WITH 절 특징
+--    · WITH 절은 내부적으로 TEMP 테이블 스페이스를 사용함
+--          -> TEMP 테이블스페이스에 각 서브쿼리 결과를 담아두고 있음
+--    · TEMP 테이블스페이스는 정렬 용도로 사용
+--    · 과도한 WITH 절 사용 시, TEMP 테이블스페이스 공간을 점유해 성능에 좋지 않음
+--    · 일반적인 경우에는 서브쿼리를 사용하고, 서브쿼리 사용이 수월치 않은 경우 WITH 절 사용
+
 -- 다양한 유형의 서브쿼리 
 
 SELECT last_name, employee_id
@@ -93,7 +125,10 @@ SELECT b.country_name, a.sal_amt
 SELECT *
   FROM mains
  ORDER BY 1;     
- 
+
+
+
+
 -- Top N Query
 -- 1 
 SELECT *
@@ -156,7 +191,50 @@ SELECT a.employee_id,
   FROM employees a
  ORDER BY a.salary   
  FETCH FIRST 5 PERCENT ROWS WITH TIES;
- 
+
+
+-- 3. SQL 처리과정
+--    · SQL 문장을 작성해 실행하면 오라클 내부에서 어떻게 처리될까?
+--    · SQL 내부 처리 프로세스
+--          - SQL Syntax Check
+--          - SQL Semantic Check
+--          - 가능한 여러 개의 실행계획(Execution Plan) 수립
+--          - 최적의 실행계획을 선택 해 SQL 실행
+--          - 실행 결과 반환
+
+--    · Syntax Check : SQL 문장 검사 (오타 등)
+--          예) select * form employees;
+--             ORA-00923: FROM keyword not found where expected
+--    · Semantic Check : 의미 검사, 객체 권한 검사
+--          예) select * from hong;
+--             ORA-00942: table or view does not exist
+--    · Shared Pool Check : SQL문장에 ID 부여 등
+--    · Optimization
+--          - SQL 문장을 최적화 해 재작성
+--          - 여러 개의 실행계획 생성
+--    · Row Source Generation : 최적의 실행계획 선정
+--    · Execution : 실행
+
+--    · 최적의 실행계획이란 ?
+--    · 내비게이션 시스템과 비슷함
+--    · 여러 개의 실행계획을 세우고 그 중 가장 비용(Cost)이 낮은 계획을 선택해 실행
+--          -> 가장 빨리 결과를 내는 실행계획을 선택
+
+--    · 최적의 실행계획을 위해서는 테이블의 통계정보를 최신으로 갱신
+--    · 통계정보 : 테이블의 로우 수, 블록 수 등 실행계획을 세우기 위한 기초 정보
+--    · 같은 테이블에 100건, 10000건, 백만 건 있을 경우에 따라 통계정보 달라짐
+--          - 조인 시, 어떤 테이블을 먼저 읽느냐에 따라 성능 차이 발생
+--    · 내비게이션에서 현재 교통상황을 반영하면 경로가 달라지는 것과 유사
+
+--    · 오라클 버전이 올라갈수록 실행계획을 잘 세우고 있음
+--    · 실행계획을 잘 못 세웠을 경우, SQL 실행 계획을 조정해 성능을 향상 -> SQL 튜닝 (힌트 사용)
+--    · 대부분의 경우, 튜닝 시 조인 방식과 순서를 변경
+
+--    · 실행했던 SQL 이력 조회 (ORAUSER로 접속해 실행)
+            SELECT *
+              FROM V$SQL;
+    
+     
  
 -- SQL 처리과정 
 -- 1
