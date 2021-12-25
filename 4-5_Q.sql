@@ -61,3 +61,13 @@ WHERE a.order_date BETWEEN TO_DATE('2018-01-01','YYYY-MM-DD')
       AND a.store_id = c.store_id
       AND a.staff_id = d.staff_id
 ORDER BY 2;
+
+7. ORDERS, ORDER_ITEMS 테이블을 조인해 2018년 월별 주문금액 합계를 조회하는 쿼리를 ANSI 조인으로 작성해 보세요. (주문금액 = order_items 의 quantity * list_price)
+-->
+SELECT TO_CHAR(a.order_date, 'YYYY-MM') months ,SUM(b.quantity * b.list_price) order_amt
+FROM ORDERS A
+INNER JOIN ORDER_ITEMS B
+ON A.ORDER_ID = B.ORDER_ID
+WHERE a.order_date BETWEEN TO_DATE('2018-01-01','YYYY-MM-DD')
+AND TO_DATE('2018-12-31','YYYY-MM-DD') GROUP BY TO_CHAR(a.order_date, 'YYYY-MM')
+ORDER BY 1;
