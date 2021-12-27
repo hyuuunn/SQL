@@ -153,6 +153,7 @@ SELECT *
 
 
 -- 2. INSERT 문
+-- **잘 사용 안함**
 --     · 구문3 ( Unconditional Multitable Insert)
 --            - INSERT ALL
 --                 INTO 테이블명1 (컬럼1, 컬럼2, ...)
