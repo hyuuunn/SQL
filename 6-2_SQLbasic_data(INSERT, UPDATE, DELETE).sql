@@ -359,14 +359,15 @@ FROM EMP3;
 --     · 컬럼 값을 수정, 조건에 따라 여러 개의 ROW 처리 가능
 --     · 한 번 실행으로 여러 개의 컬럼 값, 여러 개의 ROW 처리 가능
 --     · 어떤 ROW를 수정할 것인지는 WHERE 절에서 처리
---·구문
-- UPDATE 테이블명
-SET 컬럼1 = 변경값1, 컬럼2 = 변경값2,
-...
-WHERE 조건
-·변경 하려는 컬럼과 변경값은 데이터 형이 맞아야 함
-·변경값 항목에는 표현식, 서브쿼리도 사용 가능
-·WHERE 조건을 만족하는 ROW 만 처리됨, WHERE 절 생략 시 전체 ROW에 대해 컬럼 값 변경
+--     · 구문
+            UPDATE 테이블명
+              SET 컬럼1 = 변경값1,
+                  컬럼2 = 변경값2,
+                  ...
+             WHERE 조건
+--     · 변경 하려는 컬럼과 변경값은 데이터 형이 맞아야 함
+--     · 변경값 항목에는 표현식, 서브쿼리도 사용 가능
+--     · WHERE 조건을 만족하는 ROW 만 처리됨, WHERE 절 생략 시 전체 ROW에 대해 컬럼 값 변경
 
 -- UPDATE
 SELECT *
@@ -397,7 +398,8 @@ UPDATE EMP_INFO1
 SELECT *
   FROM EMP_INFO1
  WHERE INSTR(emp_name, 'middle') > 0 ;
- 
+
+-- update 확인
 SELECT *
   FROM EMP_INFO1
  WHERE INSTR(emp_name, 'middle') > 0 
@@ -431,6 +433,19 @@ SELECT *
  WHERE emp_no = 178;
  
 
+-- 4. DELETE 문
+--     · 테이블에 저장된 데이터를 삭제 하는 문장
+--     · ROW 단위로 삭제됨
+--     · WHERE 절 조건에 맞는 ROW가 삭제
+--     · WHERE 절 생략 시 테이블에 있는 모든 ROW 삭제
+--     ·구문
+          DELETE [FROM] 테이블명
+            WHERE 조건
+--     · FROM 은 생략 가능
+--     · WHERE 조건을 만족하는 ROW 에 한해 삭제됨 
+--     · WHERE 조건 생략 시 테이블의 전체 ROW 삭제
+     
+
 -- DELETE
 SELECT *
   FROM emp;
@@ -448,11 +463,31 @@ SELECT *
 
 COMMIT; 
 
+
+
+-- 5. SQL Developer에서 파일 Import
+--     · SQL Developer를 이용해 csv, excel 파일을 읽어 테이블에 데이터 저장
+--     · titanic.csv 파일 준비
+--     · SQL Developer 실행 후 로그인
+--     · 왼쪽 접속 창에서 테이블 선택 -> 오른쪽 마우스 클릭 -> 데이터 임포트(A) 선택
+--     · 데이터 임포트 마법사 창 -> 파일 선택 : titanic.csv -> 다음 버튼 클릭
+--     · 데이터 임포트 마법사 창 -> 테이블 이름 : titanic 입력 -> 다음 버튼 클릭
+--     · 데이터 임포트 마법사 창 -> 다음 버튼 클릭
+--     · 데이터 임포트 마법사 창 -> 각 컬럼 데이터 형 확인 후 다음 버튼 클릭
+--     · 데이터 임포트 마법사 창 -> 완료 버튼 클릭
+
 -- titanic 데이터 확인
 SELECT *
   FROM titanic;
   
-  
+
+-- 6. 테이블 생성과 데이터 복사를 동시에
+       CREATE TABLE 테이블명 AS
+       SELECT *
+          FROM 복사대상테이블;
+--     · 테이블이 생성됨과 동시에 SELECT 문이 반환하는 데이터도 함께 입력됨
+--     · DDL로 COMMIT 이 필요 없음
+
 -- 테이블 생성과 데이터 복사를 동시에 
 CREATE TABLE employees_copy AS
  SELECT *
@@ -461,3 +496,10 @@ CREATE TABLE employees_copy AS
 SELECT *
   FROM employees_copy;
    
+
+-- 정리
+--     · SQL의 DML 중 데이터를 가공하는 문장에는 INSERT, UPDATE, DELETE 가 있다.
+--     · 테이블에 신규 데이터를 입력하는 문장은 INSERT 문이다.
+--     · UPDATE 문은 저장된 데이터를 수정하는 문장이다.
+--     · DELETE 문은 저장된 데이터를 삭제하는 문장이다.
+--     · UPDATE와 DELETE 문 사용 시 WHERE 조건절 사용에 유의해야 한다.
