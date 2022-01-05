@@ -7,10 +7,4 @@ SELECT 500, 'IT2', manager_id, location_id
  FROM departments
  WHERE department_name = 'IT';
      
--- 2. 부서테이블에서 deparment_id 값이 280이상인 건 중 manager_id 값이 null인 건은 100, 아닌 건은 110으로 변경하는 문장을 작성해 보세요.
 
-UPDATE departments
-SET manager_id = CASE WHEN manager_id IS NULL THEN 100
-                      ELSE 110 
-                 END
-WHERE department_id >= 280;
