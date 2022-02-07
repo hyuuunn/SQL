@@ -15,3 +15,8 @@ UPDATE departments
                   END
  WHERE department_id >= 280;
    
+-- 3. departments 테이블에서 department_id 값이 280번 이상인 건을 삭제하는 문장을 작성해 보세요.
+
+DELETE departments
+ WHERE department_id >= 280;
+    
