@@ -20,3 +20,11 @@ UPDATE departments
 DELETE departments
  WHERE department_id >= 280;
     
+-- 4. covid19_test 테이블에서 한국의 2020년 5월부터 10월까지 데이터를 covid19_kor 이라는 테이블을 생성해 데이터까지 입력해 보세요.
+
+CREATE TABLE covid19_kor AS
+SELECT *
+  FROM covid19_test
+ WHERE iso_code = 'KOR'
+  AND dates BETWEEN TO_DATE('20200501','YYYYMMDD')
+    AND TO_DATE('20201031','YYYYMMDD');
