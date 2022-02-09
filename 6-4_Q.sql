@@ -28,3 +28,10 @@ SELECT *
  WHERE iso_code = 'KOR'
   AND dates BETWEEN TO_DATE('20200501','YYYYMMDD')
     AND TO_DATE('20201031','YYYYMMDD');
+
+-- 7-3
+-- 1. 특정 테이블에 데이터를 INSERT 한 다음, 다시 특정 조건에 따라 어느 컬럼 값을 UPDATE 해야 하는데, 올바른 트랜잭션 처리를 하려면 INSERT 문 실행 후 COMMIT 을 실행하고 다시 UPDATE 문을 실행하고 COMMIT 문을 실행해야 합니다.
+
+-- 아니오
+-- 트랜잭션 처리는 논리적인 하나의 거래 단위로 수행하는 것이 맞습니다. INSERT  UPDATE 작업이 논리적인 한 개의 작업에 속한다면 INSERT->UPDATE->COMMIT 순으로 실행하는 것이 맞습니다. 즉, COMMIT은 한 번만 수행합니다.
+-- 만약 INSERT는 성공했는데 UPDATE가 실패할 경우에는 ROLLBACK 문을 실행해 INSERT 작업 이전 상태로 돌아가는 것이 맞습니다.
