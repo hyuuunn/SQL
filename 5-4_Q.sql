@@ -26,3 +26,16 @@ SELECT a.employee_id,
    GROUP BY job_id) b
   WHERE a.job_id = b.job_id
   ORDER BY a.employee_id;
+
+-- 3. 다음 문장을 IN 대신 EXISTS 연산자를 사용해 같은 결과를 조회하도록 변경해 보세요.
+SELECT employee_id, job_id, salary
+  FROM employees
+ WHERE (job_id, salary ) IN ( SELECT job_id, min_salary
+                              FROM jobs);
+
+SELECT employee_id, job_id, salary
+  FROM employees a
+ WHERE EXISTS ( SELECT 1
+                  FROM jobs b
+                WHERE a.job_id = b.job_id
+                  AND a.salary = b.min_salary );
