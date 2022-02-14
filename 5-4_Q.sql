@@ -59,3 +59,14 @@ SELECT a.months, a.continent, a.country, a.new_cases, b.continent_cases
   AND a.continent = b.continent
   AND a.new_cases > 0
  ORDER BY 1, 2, 4 DESC ;
+
+--5. covid19 테이블을 사용해 2020년 한국의 월별 검사수, 확진자수, 확진율을 구하는 쿼리를 작성하시오.
+SELECT TO_CHAR(dates, 'MM') months,
+    NVL(SUM(new_tests),0) 검사수,
+    NVL(SUM(new_cases),0) 확진자수,
+    ROUND(NVL(SUM(new_cases),0) / NVL(SUM(new_tests),0) * 100,2) 확진율
+  FROM covid19_test
+ WHERE ISO_CODE = 'KOR'
+  AND TO_CHAR(dates, 'YYYY') = '2020'
+ GROUP BY TO_CHAR(dates, 'MM')
+ ORDER BY 1;
