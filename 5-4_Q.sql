@@ -70,3 +70,16 @@ SELECT TO_CHAR(dates, 'MM') months,
   AND TO_CHAR(dates, 'YYYY') = '2020'
  GROUP BY TO_CHAR(dates, 'MM')
  ORDER BY 1;
+
+--6-2
+--1. Covid19_test 테이블에서 2020년 전체 가장 많은 확진자가 나온 상위 5개 국가를 구하는 쿼리를 작성하시오.
+SELECT *
+  FROM ( SELECT country,
+          NVL(SUM(new_cases),0) cases
+        FROM covid19_test
+       WHERE to_char(dates, 'YYYY') = '2020'
+        AND country <> 'World'
+       GROUP BY country
+      )
+  ORDER BY cases DESC
+  FETCH FIRST 5 ROWS ONLY;
