@@ -83,3 +83,18 @@ SELECT *
       )
   ORDER BY cases DESC
   FETCH FIRST 5 ROWS ONLY;
+  
+-- 2. Covid19_test 테이블에서 2020년 인구대비 사망률이 가장 많은 상위 20개 국가를 구하는 쿼리를 작성하시오.
+SELECT *
+  FROM ( SELECT country,
+          NVL(MAX(population),0) popu,
+          NVL(SUM(new_deaths),0) death,
+          DECODE(NVL(MAX(population),0),0,0,ROUND(NVL(SUM(new_deaths),0) / NVL(MAX(population),0) * 100,5)) rates
+        FROM covid19_test
+       WHERE 1=1
+         AND TO_CHAR(dates, 'YYYY') = '2020'
+       GROUP BY country
+       )
+  WHERE rates <> 0
+  ORDER BY rates desc
+  FETCH FIRST 20 ROWS ONLY;
