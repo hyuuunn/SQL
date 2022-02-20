@@ -98,3 +98,23 @@ SELECT *
   WHERE rates <> 0
   ORDER BY rates desc
   FETCH FIRST 20 ROWS ONLY;
+
+-- 6-3
+-- 1. Covid19_test 테이블에서 2020년 각 대륙별 확진자 수를 분기별로 다음과 같이 조회하는 쿼리를 작성하시오.
+
+SELECT continent,
+    SUM(CASE WHEN quarter = '1' THEN cases else 0 end) Q1,
+    SUM(CASE WHEN quarter = '2' THEN cases else 0 end) Q2,
+    SUM(CASE WHEN quarter = '3' THEN cases else 0 end) Q3,
+    SUM(CASE WHEN quarter = '4' THEN cases else 0 end) Q4
+  FROM ( SELECT TO_CHAR(dates, 'q') quarter,
+        continent,
+        NVL(SUM(new_cases),0) cases,
+        NVL(SUM(new_deaths),0) death_num
+    FROM covid19_test
+  WHERE TO_CHAR(dates, 'YYYY') = '2020'
+    AND continent IS NOT NULL
+  GROUP BY TO_CHAR(dates, 'q'), continent
+  )
+  GROUP BY continent
+  ORDER BY 1;
