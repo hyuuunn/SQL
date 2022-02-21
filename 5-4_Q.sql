@@ -118,3 +118,24 @@ SELECT continent,
   )
   GROUP BY continent
   ORDER BY 1;
+  
+  -- 2. products 테이블에는 mode_year라는 연식 컬럼이 있습니다. 다음과 같이 주문년도별 모델연식별 판매금액을 구하는 쿼리를 PIVOT 절을 사용해 작성해 보세요. (orders, order_items, products 테이블 조인)
+
+SELECT sale_year
+    ,nvl(model_2016,0) as model_2016 
+    ,nvl(model_2017,0) as model_2017 
+    ,nvl(model_2018,0) as model_2018
+  FROM ( SELECT TO_CHAR(a.order_date, 'YYYY') sale_year 
+        ,c.model_year
+        ,NVL(SUM(b.list_price * quantity),0) amt 
+      FROM orders a
+        ,order_items b
+        ,products c 
+      WHERE 1=1
+        AND a.order_id = b.order_id
+        AND b.product_id = c.product_id
+      GROUP BY TO_CHAR(a.order_date, 'YYYY')
+        ,c.model_year 
+      ) PIVOT
+      ( SUM(amt) for model_year in ('2016' AS model_2016,'2017' AS model_2017, '2018' AS model_2018) )
+   ORDER BY 1;
