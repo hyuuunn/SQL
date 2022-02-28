@@ -89,3 +89,18 @@ WHERE a.order_date BETWEEN TO_DATE('2018-01-01','YYYY-MM-DD')
 GROUP BY TO_CHAR(a.order_date, 'YYYY-Q'), D.BRAND_NAME
 HAVING SUM(b.quantity * b.list_price) >= 10000
 ORDER BY 1, 3 DESC;
+
+-- 9. 년도별 매장별 주문금액 합계를 조회하는 쿼리를 ANSI 조인으로 작성해 보세요. (주문금액 = order_items 의 quantity * list_price)
+
+SELECT TO_CHAR(a.order_date, 'YYYY') years
+  ,e.store_name
+  ,SUM(b.quantity * b.list_price) order_amt 
+FROM ORDERS A
+INNER JOIN ORDER_ITEMS B
+ ON A.ORDER_ID = B.ORDER_ID
+INNER JOIN STORES E
+ ON A.STORE_ID = E.STORE_ID
+WHERE a.order_date BETWEEN TO_DATE('2016-01-01','YYYY- MM-DD')
+          AND TO_DATE('2019-12-31','YYYY-MM-DD')
+GROUP BY TO_CHAR(a.order_date, 'YYYY'), e.store_name
+ORDER BY 1;
