@@ -3,9 +3,9 @@
 CREATE TABLE fine_dust (
     gu_name           VARCHAR2(50) NOT NULL,  -- 구 명
     mea_station       VARCHAR2(30) NOT NULL,  -- 측정소
-    mea_date          DATE         NOT NULL,  -- 측정일자
-    pm10              NUMBER,                 -- 미세먼지농도
-    pm25              NUMBER                  -- 초미세먼지농도
+    mea_date          DATE         NOT NULL,  -- 측정 일자
+    pm10              NUMBER,                 -- 미세먼지 농도
+    pm25              NUMBER                  -- 초미세먼지 농도
 );
 
 ALTER TABLE fine_dust
@@ -17,10 +17,10 @@ ADD CONSTRAINTS fine_dust_pk PRIMARY KEY (gu_name, mea_station, mea_date);
 CREATE TABLE fine_dust_standard (
     org_name          VARCHAR2(50) NOT NULL,  -- 기관명
     std_name          VARCHAR2(30) NOT NULL,  -- 미세먼지 기준
-    pm10_start        NUMBER,                 -- 미세먼지농도(시작)
-    pm10_end          NUMBER,                 -- 미세먼지농도(끝)
-    pm25_start        NUMBER,                 -- 초미세먼지농도(시작)
-    pm25_end          NUMBER                  -- 초미세먼지농도  (끝)  
+    pm10_start        NUMBER,                 -- 미세먼지 농도(시작)
+    pm10_end          NUMBER,                 -- 미세먼지 농도(끝)
+    pm25_start        NUMBER,                 -- 초미세먼지 농도(시작)
+    pm25_end          NUMBER                  -- 초미세먼지 농도  (끝)  
 );
 
 ALTER TABLE fine_dust_standard
