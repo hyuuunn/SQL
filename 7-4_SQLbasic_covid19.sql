@@ -1,4 +1,4 @@
--- 데이터분석 시각화2
+-- 시각화2
 -- covid19_country 테이블 생성
 CREATE TABLE covid19_country (
   countrycode                 VARCHAR2(10) NOT NULL, 
@@ -100,7 +100,7 @@ SELECT months, continent, countryname,
        DECODE(tot, 0, 0, ROUND(case_num / tot * 100,2)) rates
   FROM covid2 ;
   
--- 2-2.2020년 월별, 대륙별, 국가별 감염수, 대륙기준 감염수 비율   
+-- 2-2.2020년 월별, 대륙별, 국가별 감염수, 대륙 기준 감염수 비율   
 WITH covid1 AS (
 SELECT TO_CHAR(b.issue_date, 'YYYYMM') months,
        a.continent, a.countryname, 
