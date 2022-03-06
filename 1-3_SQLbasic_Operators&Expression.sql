@@ -154,7 +154,7 @@ SELECT *
   FROM employees
  WHERE phone_number LIKE '011%';
  
--- 2-3-24. LIKE 연산자2
+-- LIKE 연산자2
 SELECT *
   FROM employees
  WHERE phone_number LIKE '%9'; 
